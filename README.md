@@ -4,6 +4,8 @@
 
 [![NPM](https://nodei.co/npm/bolyan.svg)](https://nodei.co/npm/bolyan/)
 
+[![Build Status](https://travis-ci.org/sandfox/bolyan.svg)](https://travis-ci.org/sandfox/bolyan)
+
 This is bascically [Bole](https://github.com/rvagg/bole) but output is even more bunyan compatible. @rvagg has written about 99% of this and I've just diddled some object keys, added some output levels, and copy+pasta'd some code from bunyan for serialization so that if you log an object that has any of the keys `req`, `res`, `err`, an attempt will be made to use the applicable bunyan serializer on those values
 
 Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bolyan/bole** aims for even more simplicity, supporting only the common-case basics.

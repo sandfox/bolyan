@@ -6,14 +6,52 @@ var http = require('http')
   , pid  = process.pid
   , host = require('os').hostname()
 
+/**
+ * Awful copy pasting from bole.js
+ */
+var TRACE = 10;
+var DEBUG = 20;
+var INFO = 30;
+var WARN = 40;
+var ERROR = 50;
+var FATAL = 60;
+
+var levelFromName = {
+    'trace': TRACE,
+    'debug': DEBUG,
+    'info': INFO,
+    'warn': WARN,
+    'error': ERROR,
+    'fatal': FATAL
+};
+
+/**
+ * Resolve a level number, name (upper or lowercase) to a level number value.
+ */
+function resolveLevel(nameOrNum) {
+    var level = (typeof (nameOrNum) === 'string'
+            ? levelFromName[nameOrNum.toLowerCase()]
+            : nameOrNum);
+    if (! (TRACE <= level && level <= FATAL)) {
+        throw new Error('invalid level: ' + nameOrNum);
+    }
+    return level;
+}
+
+/**
+ * End Awful copy pasting from bole.js
+ */
 
 function mklogobj (name, level, inp) {
   var out = {
-          time     : new Date().toISOString()
+          name    : name
         , hostname : host
         , pid      : pid
-        , level    : level
-        , name    : name
+        , level    : resolveLevel(level)
+        , msg      : ''
+        , v        : 0      
+        , time     : new Date().toISOString()
+        , 
       }
     , k
 
@@ -203,12 +241,12 @@ test('test string formatting', function (t) {
   }
 
   testSingle('debug', {}, [])
-  testSingle('debug', { message: 'test' }, [ 'test' ])
-  testSingle('info', { message: 'true' }, [ true ])
-  testSingle('info', { message: 'false' }, [ false ])
-  testSingle('warn', { message: 'a number [42]' }, [ 'a number [%d]', 42 ])
-  testSingle('error', { message: 'a string [str]' }, [ 'a string [%s]', 'str' ])
-  testSingle('error', { message: 'foo bar baz' }, [ 'foo', 'bar', 'baz' ])
+  testSingle('debug', { msg: 'test' }, [ 'test' ])
+  testSingle('info', { msg: 'true' }, [ true ])
+  testSingle('info', { msg: 'false' }, [ false ])
+  testSingle('warn', { msg: 'a number [42]' }, [ 'a number [%d]', 42 ])
+  testSingle('error', { msg: 'a string [str]' }, [ 'a string [%s]', 'str' ])
+  testSingle('error', { msg: 'foo bar baz' }, [ 'foo', 'bar', 'baz' ])
 })
 
 
@@ -227,8 +265,8 @@ test('test error formatting', function (t) {
   })
 
   expected = mklogobj('errfmt', 'debug', { err: {
-      name    : 'Error'
-    , message : 'error msg in here'
+      message : 'error msg in here'
+    , name    : 'Error'
     , stack   : 'STACK'
   }})
   log.debug(err)
@@ -258,10 +296,10 @@ test('test error formatting with message', function (t) {
   })
 
   expected = mklogobj('errfmt', 'debug', {
-      message : 'this is a message'
+      msg : 'this is a message'
     , err     : {
-          name    : 'Error'
-        , message : 'error msg in here'
+          message : 'error msg in here'
+        , name    : 'Error'
         , stack   : 'STACK'
       }
   })
@@ -342,7 +380,7 @@ test('test request object with message', function (t) {
 
   server = http.createServer(function (req, res) {
     expected = mklogobj('reqfmt', 'info', {
-        message : 'this is a message'
+        msg : 'this is a message'
       , req: {
             method : 'GET'
           , url    : '/foo?bar=baz'
