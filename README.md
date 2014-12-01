@@ -4,11 +4,11 @@
 
 [![NPM](https://nodei.co/npm/bolyan.svg)](https://nodei.co/npm/bolyan/)
 
-This is bascically [Bunyan](https://github.com/rvagg/bole) but output is even more bunyan compatible. @rvagg has written about 99% of this and I've just diddled some object keys, added some output levels, and copy+pasta'd some code from bunyan for serialization so that if you log an object that has any of the keys `req`, `res`, `err`, an attempt will be made to use the applicable bunyan serializer on those values
+This is bascically [Bole](https://github.com/rvagg/bole) but output is even more bunyan compatible. @rvagg has written about 99% of this and I've just diddled some object keys, added some output levels, and copy+pasta'd some code from bunyan for serialization so that if you log an object that has any of the keys `req`, `res`, `err`, an attempt will be made to use the applicable bunyan serializer on those values
 
-Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bolyan** aims for even more simplicity, supporting only the common-case basics.
+Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bolyan/bole** aims for even more simplicity, supporting only the common-case basics.
 
-**bolyan** is designed for global singleton use. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bole** for logging.
+**bolyan** is designed for global singleton use. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bolyan** for logging.
 
 ## Example
 
@@ -24,10 +24,10 @@ module.exports.derp = function derp() {
 
 **main.js**
 ```js
-var bole = require('bole')
+var bolyan = require('bolyan')
 var mod  = require('./mymodule')
 
-bole.output({
+bolyan.output({
   level: 'info',
   stream: process.stdout
 })
@@ -42,7 +42,7 @@ $ node main
 
 ## Features
 
-* Arbitrary log **names**, create a logger by calling `var log = bole('logname')` and `'logname'` will be attached to the output
+* Arbitrary log **names**, create a logger by calling `var log = bolyan('logname')` and `'logname'` will be attached to the output
 * Loggers have 6 levels / methods: `log.trace()`, `log.debug()`, `log.info()`, `log.warn()`, `log.error(), `log.fatal()``
 * Log methods accept `console.log()` style strfmt output ( using`util.format()`): `log.warn('foo %s', 'bar')`
 * Log methods accept arbitrary objects that extend the log output data, each property on the object is attached to the debug output object
@@ -55,7 +55,7 @@ $ node main
 
 ## API
 
-### bole(name)
+### bolyan(name)
 
 Create a new **logger** with the supplied `name` to be attached to each output. If you keep a logger-per module you don't need to pass loggers around, *keep your concerns separated*.
 
@@ -77,10 +77,10 @@ If you require more sophisticated serialisation of your objects, then write a ut
 
 ### logger()
 
-The `logger` object returned by `bole(name)` is also a function that accepts a `name` argument. It returns a new logger whose name is the parent logger with the new name appended after a `':'` character. This is useful for splitting a logger up for grouping events. Consider the HTTP server case where you may want to group all events from a particular request together:
+The `logger` object returned by `bolyan(name)` is also a function that accepts a `name` argument. It returns a new logger whose name is the parent logger with the new name appended after a `':'` character. This is useful for splitting a logger up for grouping events. Consider the HTTP server case where you may want to group all events from a particular request together:
 
 ```js
-var log = bole('server')
+var log = bolyan('server')
 
 http.createServer(function (req, res) {
   req.log = log(uuid.v4()) // make a new sub-logger
@@ -97,18 +97,18 @@ In this case, your events would be listed as something like `"name":"server:93f5
 
 Sub-loggers can even be split in to sub-sub loggers, the rabbit hole is ~bottomless.
 
-### bole.output()
+### bolyan.output()
 
 Add outputs for application-wide logging, accepts either an object for defining a single output or an array of objects defining multiple outputs. Each output requires only a `'level'` and a `'stream'`, where the *level* defines the *minimum* debug level to print to this stream and the *stream* is any `WritableStream` that accepts a `.write()` method.
 
 ```js
-bole.output([
+bolyan.output([
   { level: 'debug', fs.createWriteStream('app.log') },
   { level: 'info', process.stdout }
 ])
 ```
 
-### bole.reset()
+### bolyan.reset()
 
 Clears all output streams from the application
 
@@ -123,3 +123,5 @@ If you need to filter a present output data in a special way, **write a package 
 ## License
 
 **bole** is Copyright (c) 2014 Rod Vagg [@rvagg](https://twitter.com/rvagg) and licensed under the MIT License. All rights not explicitly granted in the MIT License are reserved. See the included [LICENSE.md](./LICENSE.md) file for more details.
+**bolyan** extension work is Copyright (c) 2014 James Butler (https://sandfox.co.uk)
+**bunyan** is Copyright (c) 2014 Trent Mick & Joyent Inc. All rights reserved.

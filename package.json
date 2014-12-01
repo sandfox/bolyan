@@ -1,17 +1,25 @@
 {
   "name": "bolyan",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A tiny (bunyan compatible) JSON logger",
   "main": "bole.js",
+  "homepage": "https://github.com/sandfox/bolyan",
+  "bugs": "https://github.com/sandfox/bolyan/issues",
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/sandfox/bolyan.git"
+    },
   "scripts": {
     "test": "node test.js"
   },
   "keywords": [
+    "bole",
     "bunyan",
     "logging",
     "json"
   ],
   "author": "Rod Vagg <r@va.gg> (@rvagg)",
+  "contributors": ["James Butler (@sandfox)"],
   "license": "MIT",
   "dependencies": {
     "json-stringify-safe": "~5.0.0",
