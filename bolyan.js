@@ -6,7 +6,10 @@ var stringify  = require('json-stringify-safe')
   , hostname   = require('os').hostname()
   , pid        = process.pid
 
-// Messy straight up copy from bunyan
+/**
+ * START: bits copied from bunyan
+ */
+
 var LOG_VERSION = 0;
 
 var TRACE = 10;
@@ -81,13 +84,6 @@ function errSerializer (err) {
     return obj;
 };
 
-// TODO: maybe make this editable/configurable like output is
-var serializers = {
-  req: reqSerializer,
-  res: resSerializer,
-  err: errSerializer
-}
-
 function _applySerializers (fields) {
 
   Object.keys(serializers).forEach(function (name) {
@@ -100,6 +96,17 @@ function _applySerializers (fields) {
 
   })
 }
+/**
+ * END: bits copied from bunyan
+ */
+
+// TODO: maybe make this editable/configurable like output is
+var serializers = {
+  req: reqSerializer,
+  res: resSerializer,
+  err: errSerializer
+}
+
 
 /*
  * (Doc block from bunyan - for info purposes)
@@ -173,9 +180,9 @@ function levelLogger (level, name) {
 }
 
 
-function bole (name) {
-  function boleLogger (subname) {
-    return bole(name + ':' + subname)
+function bolyan (name) {
+  function bolyanLogger (subname) {
+    return bolyan(name + ':' + subname)
   }
 
   function makeLogger (p, level) {
@@ -183,13 +190,13 @@ function bole (name) {
     return p
   }
 
-  return levels.reduce(makeLogger, boleLogger)
+  return levels.reduce(makeLogger, bolyanLogger)
 }
 
 
-bole.output = function (opt) {
+bolyan.output = function (opt) {
   if (Array.isArray(opt))
-    return opt.forEach(bole.output)
+    return opt.forEach(bolyan.output)
 
   var i = 0
     , b = false
@@ -207,10 +214,10 @@ bole.output = function (opt) {
 }
 
 
-bole.reset = function () {
+bolyan.reset = function () {
   for (var k in individual)
     delete individual[k]
 }
 
 
-module.exports = bole
+module.exports = bolyan

@@ -1,8 +1,8 @@
 {
   "name": "bolyan",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A tiny (bunyan compatible) JSON logger",
-  "main": "bole.js",
+  "main": "bolyan.js",
   "homepage": "https://github.com/sandfox/bolyan",
   "bugs": "https://github.com/sandfox/bolyan/issues",
   "repository":{

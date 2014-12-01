@@ -125,5 +125,5 @@ If you need to filter a present output data in a special way, **write a package 
 ## License
 
 **bole** is Copyright (c) 2014 Rod Vagg [@rvagg](https://twitter.com/rvagg) and licensed under the MIT License. All rights not explicitly granted in the MIT License are reserved. See the included [LICENSE.md](./LICENSE.md) file for more details.
-**bolyan** extension work is Copyright (c) 2014 James Butler (https://sandfox.co.uk)
+**bolyan** is Copyright (c) 2014 James Butler (https://sandfox.co.uk)
 **bunyan** is Copyright (c) 2014 Trent Mick & Joyent Inc. All rights reserved.
