@@ -1,18 +1,20 @@
-# bole
+# bolyan
 
-**A tiny JSON logger**
+**A tiny (bunyan compatible) JSON logger**
 
-[![NPM](https://nodei.co/npm/bole.svg)](https://nodei.co/npm/bole/)
+[![NPM](https://nodei.co/npm/bolyan.svg)](https://nodei.co/npm/bolyan/)
 
-Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bole** aims for even more simplicity, supporting only the common-case basics.
+This is bascically [Bunyan](https://github.com/rvagg/bole) but output is even more bunyan compatible. @rvagg has written about 99% of this and I've just diddled some object keys, added some output levels, and copy+pasta'd some code from bunyan for serialization so that if you log an object that has any of the keys `req`, `res`, `err`, an attempt will be made to use the applicable bunyan serializer on those values
 
-**bole** is designed for global singleton use. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bole** for logging.
+Log JSON from within Node.js applications. The log format is obviously inspired by the excellent [Bunyan](https://github.com/trentm/node-bunyan) and is likely to be output-compatible in most cases. The difference is that **bolyan** aims for even more simplicity, supporting only the common-case basics.
+
+**bolyan** is designed for global singleton use. Your application has many log sources, but they all aggregate to the same sources. You configure output in *one place* for an application, regardless of how many modules and dependencies are also using **bole** for logging.
 
 ## Example
 
 **mymodule.js**
 ```js
-var log = require('bole')('mymodule')
+var log = require('bolyan')('mymodule')
 
 module.exports.derp = function derp() {
   log.debug('W00t!')
@@ -41,7 +43,7 @@ $ node main
 ## Features
 
 * Arbitrary log **names**, create a logger by calling `var log = bole('logname')` and `'logname'` will be attached to the output
-* Loggers have 4 levels / methods: `log.debug()`, `log.info()`, `log.warn()`, `log.error()`
+* Loggers have 6 levels / methods: `log.trace()`, `log.debug()`, `log.info()`, `log.warn()`, `log.error(), `log.fatal()``
 * Log methods accept `console.log()` style strfmt output ( using`util.format()`): `log.warn('foo %s', 'bar')`
 * Log methods accept arbitrary objects that extend the log output data, each property on the object is attached to the debug output object
 * Log methods accept `Error` objects and print appropriate `Error` properties, including a full stack trace (including any *cause* where supported)
@@ -57,9 +59,9 @@ $ node main
 
 Create a new **logger** with the supplied `name` to be attached to each output. If you keep a logger-per module you don't need to pass loggers around, *keep your concerns separated*.
 
-### logger#debug(), logger#info(), logger#warn(), logger#error()
+### logger#trace(), logger#debug(), logger#info(), logger#warn(), logger#error(), logger#fatal()
 
-Loggers have 4 roughly identical log methods, one for each of the supports log-levels. Log levels are recorded on the output and can be used to determine the level of detail passed to the output.
+Loggers have 6 roughly identical log methods, one for each of the supports log-levels. Log levels are recorded on the output and can be used to determine the level of detail passed to the output.
 
 Log methods support the following types of input:
 

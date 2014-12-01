@@ -1,12 +1,13 @@
 {
-  "name": "bole",
-  "version": "0.1.0",
-  "description": "A tiny JSON logger",
+  "name": "bolyan",
+  "version": "0.2.0",
+  "description": "A tiny (bunyan compatible) JSON logger",
   "main": "bole.js",
   "scripts": {
     "test": "node test.js"
   },
   "keywords": [
+    "bunyan",
     "logging",
     "json"
   ],
